@@ -1,12 +1,13 @@
-# Use official .NET runtime as base image
+# Base image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 8080
 
-# Use SDK image to build the app
+# Build image
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY . .
+RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish
 
 # Final image
