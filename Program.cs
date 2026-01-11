@@ -31,14 +31,17 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// 🔹 CORS
+// 🔹 CORS enable
 app.UseCors("AllowAll");
 
-// 🔹 Swagger
+// 🔹 Static files
+app.UseStaticFiles();
+
+// 🔹 Swagger UI
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// 🔹 Routes
+// 🔹 API routes
 app.MapControllers();
 
 app.Run();
