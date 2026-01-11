@@ -4,10 +4,10 @@ using SiteSurveyApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🔹 PostgreSQL + PostGIS connection
+// 🔹 PostgreSQL + PostGIS (NetTopologySuite) connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
-        builder.Configuration.GetConnectionString("Postgres"),
+        builder.Configuration.GetConnectionString("DefaultConnection"),
         o => o.UseNetTopologySuite()
     )
 );
@@ -26,11 +26,27 @@ builder.Services.AddCors(options =>
 // 🔹 Controllers
 builder.Services.AddControllers();
 
-// 🔹 Swagger (testing ke liye)
+// 🔹 Swagger (API testing ke liye)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// 🔹 Development me Swagger
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+else
+{
+    // Production me bhi Swagger chahiye ho to uncomment kar sakte ho
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+// 🔹 HTTPS redirect
+app.UseHttpsRedirection();
 
 // 🔹 CORS enable
 app.UseCors("AllowAll");
@@ -38,9 +54,8 @@ app.UseCors("AllowAll");
 // 🔹 Static files (uploads folder ke liye)
 app.UseStaticFiles();
 
-// 🔹 Swagger UI
-app.UseSwagger();
-app.UseSwaggerUI();
+// 🔹 Authorization (agar future me auth add karo)
+app.UseAuthorization();
 
 // 🔹 API routes
 app.MapControllers();
