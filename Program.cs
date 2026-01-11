@@ -3,7 +3,7 @@ using SiteSurveyApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🔹 PostgreSQL + PostGIS
+// 🔹 PostgreSQL + PostGIS connection (Render DB)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
